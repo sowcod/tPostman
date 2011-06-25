@@ -4,12 +4,14 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 import twoauth
+from api import get_consumers
 
-_ckey = r'bXDe1Etl6queYlu6t6Ntvg'
-_csecret = r'ifNrQpnXUxYsuJTMVo6A5wzLjB6FPlYRULY9WIquc'
+def create_oauth(token = '', token_secret = ''):
+	(ckey, csecret) = get_consumers()
+	return twoauth.oauth(ckey, csecret, token, token_secret)
 
 def access_token(request):
-	oauth = twoauth.oauth(_ckey, _csecret)
+	oauth = create_oauth()
 
 	req_token = oauth.request_token()
 	url = oauth.authorize_url(req_token)
@@ -23,7 +25,7 @@ def auth(request):
 	verifier = request.GET['oauth_verifier']
 	req_token = request.session['req_token']
 
-	oauth = twoauth.oauth(_ckey, _csecret)
+	oauth = create_oauth()
 	acc_token = oauth.access_token(req_token, verifier)
 
 	try:
@@ -47,12 +49,6 @@ def logout(request):
 
 	return HttpResponseRedirect('/')
 
-def create_api(request):
-	from models import Authorization
-	user_id = request.session['user_id']
-	auth = Authorization.objects.get(user_id = user_id)
-	return twoauth.api(_ckey, _csecret, auth.token, auth.token_secret)
-
 def toppage(request):
 	from models import Authorization
 	try:
@@ -65,15 +61,12 @@ def toppage(request):
 	except (Authorization.DoesNotExist, KeyError):
 		return render_to_response('main/top.html')
 
-def tweet(request):
-	import base64
-	import pyDes
-	api = create_api(request)
-	tweet = request.GET['tweet']
+def opentweet(request):
+	from models import Authorization
+	user_id = request.session['user_id']
+	auth = Authorization.objects.get(user_id = user_id)
+	values = {'auth':auth}
+	return render_to_response('main/tweetwin.html',
+			values,
+			RequestContext(request))
 
-	tweetbin = base64.b64decode(tweet)
-	k = pyDes.des(request.session.session_key[:8], pyDes.ECB)
-	tweetdec = k.decrypt(tweetbin)
-	
-	api.status_update(tweetdec)
-	return HttpResponseRedirect('/')

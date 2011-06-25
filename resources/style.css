@@ -1,0 +1,58 @@
+body.tweetwin{
+	margin: 0;
+	padding: 0;
+}
+
+div.tweetarea{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.tweettextarea{
+	resize: none;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	padding-right:36;
+	background-color: #000000;
+	color: #aaaaaa;
+	background-image: url("/resources/images/textback.png");
+	background-repeat: repeat-y;
+	background-position: right;
+
+	font-size: 9pt;
+}
+
+.tweettextarea[readonly]{
+	background-color: #222222;
+	color: #666666;
+}
+
+#tweetlen{
+	position:absolute;
+	color: #aaaaaa;
+	right: 5px;
+	bottom: 5px;
+	cursor: default;
+
+	font-size: 9pt;
+}
+
+#tweetlen.normal {
+	color: #aaaaaa;
+}
+#tweetlen.over {
+	color:#ff0000;
+}
+#loadingimg {
+	position:absolute;
+	background-image: url("/resources/images/loading.gif");
+	right: 8px;
+	top: 5px;
+	width: 16px;
+	height: 16px;
+	color: red;
+	visibility: hidden;
+}

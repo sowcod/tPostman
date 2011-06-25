@@ -3,40 +3,22 @@
 		<title>tPostman - {{ auth.screen_name }}</title>
 	</head>
 	<body>
-		<script type="text/javascript" src="/resources/des.js" ></script>
-		<script type="text/javascript" src="/resources/base64.js" ></script>
 		<script type="text/javascript">
-			function initial(ev){
-				//document.getElementById('console').value = document.cookie;
+			function opensub(ev)
+			{
+				win = window.open("/opentweet", "opentweet", "scrollbars=no,menubar=no,toolbar=no,location=no,status=no,directories=no");
+				win.moveTo(0, screen.availHeight - 20);
+				win.resizeTo(600,20);
 			}
-			function getCookies(){
-				cookies = {};
-				pairs = document.cookie.split('&');
-				for(index in pairs){
-					kv = pairs[index].split('=');
-					cookies[kv[0]] = kv[1];
-				}
-				return cookies;
-			}
-			function tweet(ev){
-				cookies = getCookies();
-				msg = document.getElementById('tweetorg').value;
-				key = cookies['sessionid'].substring(0, 8);
-				//msg8 = utf16to8(msg);
-				enc = des.encrypt(msg, key, "ecb");
-				//enc = des_cbc_encrypt(cookies['sessionid'].substring(0, 8), msg);
-				out = base64.encode(enc);
-				//out = base64encode(enc);
-				document.getElementById('tweetarea').value = out;
-				document.getElementById('tweetform').submit()
-			}
-			window.onload = initial;
 		</script>
 		<a href="/logout">sign out</a>
+		<a href="javascript:opensub(event)" >open tweet window</a>
+		<!--
 		<form action="/tweet" id='tweetform' method='GET'>
 			<input type="hidden" id="tweetarea" name="tweet" value="" />
 		</form>
 		<textarea id="tweetorg"></textarea>
 		<input type="button" value="tweet!" onclick="tweet(event)" />
+		-->
 	</body>
 </html>
